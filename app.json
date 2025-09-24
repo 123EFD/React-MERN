@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "mybookapp", // this is for link name: mybookapp://
     "name": "React-MERN",
     "slug": "React-MERN",
     "version": "1.0.0",
@@ -24,6 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
