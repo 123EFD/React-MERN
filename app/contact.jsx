@@ -1,30 +1,23 @@
-import {StyleSheet, Text, View , Image,useColorScheme} from 'react-native'
+import { StyleSheet, Text, View,useColorScheme } from 'react-native'
 import { Link } from 'expo-router';
+import {Colors} from '../constants/Colors.js'
 
-const Home = () => {
+const Contact = () => {
     const colorScheme = useColorScheme();
     const theme = Colors[colorScheme] ?? Colors.dark
 
   return (
     <View style={[styles.container, {backgroundColor: theme.background}]}>
-        <Image 
-            source={require('../assets/img/bookshelf.png')}
-            style={styles.img}
-        />
+        <Text style={styles.title}>Contact Page</Text>
         
-        <Text style={[styles.title, { color: '#FA8F6E' }]}>
-                Learning List App
-        </Text>
-
-        <Link href="/about" style={styles.link}>About</Link>
-
-        <Link href="/contact" style={styles.link}>Contact</Link>
-
+        <Link href="/" style={styles.link}>Home</Link>
     </View>
+
+    
   )
 }
 
-export default Home
+export default Contact
 
 const styles = StyleSheet.create({
     //An object of CSS style
@@ -44,7 +37,6 @@ const styles = StyleSheet.create({
     },
     link:{
         marginVertical:20,
-        borderBottomWidth: 1,
         color:'#E8B76D',
     }
 })
