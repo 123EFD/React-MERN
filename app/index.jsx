@@ -1,26 +1,35 @@
-import {StyleSheet, Text, View , Image,useColorScheme} from 'react-native'
+import {StyleSheet , Image} from 'react-native'
 import { Link } from 'expo-router';
+import Spaces from '../components/Spaces';
+
+//ThemeView component
+import ThemeView from '../components/ThemeView'
+import ThemeText from '../components/ThemeText';
 
 const Home = () => {
-    const colorScheme = useColorScheme();
-    const theme = Colors[colorScheme] ?? Colors.dark
-
+    
   return (
-    <View style={[styles.container, {backgroundColor: theme.background}]}>
+    <ThemeView style={styles.container}>
         <Image 
             source={require('../assets/img/bookshelf.png')}
             style={styles.img}
         />
         
-        <Text style={[styles.title, { color: '#FA8F6E' }]}>
-                Learning List App
-        </Text>
+        <Spaces/>
+        <ThemeText style={styles.title} title={true}>
+            Learning List App
+        </ThemeText>
+        <Spaces/>
 
-        <Link href="/about" style={styles.link}>About</Link>
+        <Link href="/about" style={styles.link}>
+            <ThemeText>About</ThemeText>
+        </Link>
 
-        <Link href="/contact" style={styles.link}>Contact</Link>
+        <Link href="/contact" style={styles.link}>
+            <ThemeText>Contact</ThemeText>
+        </Link>
 
-    </View>
+    </ThemeView>
   )
 }
 
@@ -45,6 +54,8 @@ const styles = StyleSheet.create({
     link:{
         marginVertical:20,
         borderBottomWidth: 1,
-        color:'#E8B76D',
+        color:'#F5517F',
     }
 })
+
+//<Spaces> 's variable can be overwritten by stating <Spaces width={} height={} />
