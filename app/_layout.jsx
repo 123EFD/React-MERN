@@ -1,5 +1,5 @@
 import { Stack } from "expo-router"
-import { StyleSheet, Text, useColorScheme, View } from "react-native"   
+import { StyleSheet, useColorScheme } from "react-native"   
 import {Colors} from '../constants/Colors'
 import { StatusBar } from "expo-status-bar";
 
@@ -16,9 +16,10 @@ const RootLayout = () => {
             headerTintColor: theme.title,
             headerTitleStyle: { fontWeight: 'semibold' }
         }}>
+            <Stack.Screen name="(auth)" options={{ headerShown: false }}></Stack.Screen> 
+
             <Stack.Screen name="index" options={{title: 'Home'}}></Stack.Screen> 
-            <Stack.Screen name="about" options={{title: 'About'}}></Stack.Screen> 
-            <Stack.Screen name="contact" options={{title: 'Contact', headerShown: false}}></Stack.Screen> 
+             
         </Stack>
     </>
   )
@@ -33,6 +34,6 @@ const styles = StyleSheet.create({})
 //When using <slot> we will the footer is fixed in same position on all pages
 //Stack is a navigation component, it will handle the navigation between different pages (just like a "<-" back button in your PC website)
 //<Stack> create a "section" which show the current page title and allow smooth transition between pages
-//Stack.Screen help to customize the screen design of each title section pages
+//Stack.Screen (name="filename") help to customize the nav background design of each title section pages
 //screenOptions: a global scope of options={}
 //Statusbar: provides quick, at-a-glance information about a system, application, or window to the user, without requiring them to interrupt their current task

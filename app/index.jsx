@@ -1,10 +1,10 @@
 import {StyleSheet , Image} from 'react-native'
-import { Link } from 'expo-router';
-import Spaces from '../components/Spaces';
+import { Link } from 'expo-router'
 
 //ThemeView component
 import ThemeView from '../components/ThemeView'
-import ThemeText from '../components/ThemeText';
+import ThemeText from '../components/ThemeText'
+import Spaces from '../components/Spaces'
 
 const Home = () => {
     
@@ -21,12 +21,12 @@ const Home = () => {
         </ThemeText>
         <Spaces/>
 
-        <Link href="/about" style={styles.link}>
-            <ThemeText>About</ThemeText>
+        <Link href="/login" style={styles.link}>
+            <ThemeText>Login</ThemeText>
         </Link>
 
-        <Link href="/contact" style={styles.link}>
-            <ThemeText>Contact</ThemeText>
+        <Link href="/register" style={styles.link}>
+            <ThemeText>Register</ThemeText>
         </Link>
 
     </ThemeView>
