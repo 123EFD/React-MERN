@@ -6,12 +6,18 @@ import ThemeView from '../../components/ThemeView'
 import Spaces from '../../components/Spaces'
 import {Colors} from '../../constants/Colors'
 import ThemeButton from '../../components/ThemeButton'
+import ThemeTextInput from '../../components/ThemeTextInput'
+import { useState } from 'react'
 
 
 const Login = () => {
+    //first:state value, second:func to update the state value
+    //initial state is an empty string/When setEmail('abc'), then email = 'abc'
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     const handleSubmit = () => {
-        console.log('Login')
+        console.log('Login form submitted', email, password)
     }
 
   return (
@@ -21,6 +27,22 @@ const Login = () => {
         <ThemeText title={true} style={styles.title}>
             Login your account
         </ThemeText>
+
+        <ThemeTextInput 
+        style={{ width: '80%', marginBottom: 20 }}
+        placeholder="Email" 
+        keyboardType="email-address"
+        onChangeText= {setEmail} //same as (text) => setEmail(text)
+        value={email} //two-way data binding->if update email in elsewhere, it still update in the input form
+        />
+
+        <ThemeTextInput 
+        style={{ width: '80%', marginBottom: 20 }}
+        placeholder="Password" 
+        onChangeText= {setPassword} //same as (text) => setEmail(text)
+        value={password} //two-way data binding->if update email in elsewhere, it still update in the input form
+        secureTextEntry //hide the password input using dots
+        />
 
         <ThemeButton onPress={handleSubmit}>
             <Text style={{ color: '#590653' }}>Login</Text>
@@ -72,3 +94,4 @@ const styles = StyleSheet.create({
 //About pressable to make a button: () => ({}) pass a func by destructuring the pressed (boolean)
 // props instead of passing argument
 //For the pressed argu. in the pressed function create a hover effect when pressed is true
+//useState: to track the state the user types into the email input

@@ -1,37 +1,60 @@
-import {StyleSheet, Text} from 'react-native'
+import {Keyboard, StyleSheet, Text, TouchableWithoutFeedback} from 'react-native'
 //import Spaces from '../components/Spaces'
 import {Link} from 'expo-router'    
 import ThemeText from '../../components/ThemeText'
 import ThemeView from '../../components/ThemeView'
 import Spaces from '../../components/Spaces'
 import ThemeButton from '../../components/ThemeButton'
+import ThemeTextInput from '../../components/ThemeTextInput'
+import { useState } from 'react'
 
 const Register = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     const handleSubmit = () => {
-        console.log('register')
+        console.log('register', email, password)
     }
 
   return (
-    <ThemeView style={styles.container}>
+    //dismiss the keyboard when click outside the input area
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}> 
+        <ThemeView style={styles.container}>
 
-        <Spaces/>
-        <ThemeText title={true} style={styles.title}>
-            Register your account
-        </ThemeText>
-
-        <ThemeButton onPress={handleSubmit}>
-            <Text style={{ color: '#590653' }}>Register</Text>
-        </ThemeButton>
-
-        <Spaces height={50}/>
-        <Link href='/login'>
-            <ThemeText style={{ textAlign:'center', fontSize: 16 }}>
-                Don't have an account? Register
+            <Spaces/>
+            <ThemeText title={true} style={styles.title}>
+                Register your account
             </ThemeText>
-        </Link>
 
-    </ThemeView>
+            <ThemeTextInput 
+            style={{ width: '80%', marginBottom: 20 }}
+            placeholder="Email" 
+            keyboardType="email-address"
+            onChangeText= {setEmail} //same as (text) => setEmail(text)
+            value={email} //two-way data binding->if update email in elsewhere, it still update in the input form
+            />
+
+            <ThemeTextInput 
+            style={{ width: '80%', marginBottom: 20 }}
+            placeholder="Password" 
+            onChangeText= {setPassword} //same as (text) => setEmail(text)
+            value={password} //two-way data binding->if update email in elsewhere, it still update in the input form
+            secureTextEntry //hide the password input using dots
+            />
+
+            <ThemeButton onPress={handleSubmit}>
+                <Text style={{ color: '#590653' }}>Register</Text>
+            </ThemeButton>
+
+            <Spaces height={50}/>
+            <Link href='/login'>
+                <ThemeText style={{ textAlign:'center', fontSize: 16 }}>
+                    Don't have an account? Register
+                </ThemeText>
+            </Link>
+
+        </ThemeView>
+    </TouchableWithoutFeedback>
   )
 }
 
