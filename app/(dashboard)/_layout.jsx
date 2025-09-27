@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router"
 import { useColorScheme } from "react-native"
 import {Colors} from "../../constants/Colors"
+import { Ionicons } from '@expo/vector-icons';
 
 const DashboardLayout = () => {
   const colorScheme = useColorScheme()
@@ -19,16 +20,34 @@ const DashboardLayout = () => {
       }}
     >
       <Tabs.Screen 
-      name="profile" 
-      options={{ title:'Profile' }}
+      name="profile"  
+      options={{ title:'Profile', tabBarIcon: ({ focused }) => ( //focused is true when the tab is active
+        <Ionicons
+            size={24}
+            name={focused ? "person" : "person-outline"} //icon you desired to use, using ternary operator 
+            color={focused ? theme.iconColorFocused : theme.iconColor} //change color based on active/inactive state
+        />
+      ) }}
       />
        <Tabs.Screen 
       name="books" 
-      options={{ title:'Books' }}
+      options={{ title:'Books', tabBarIcon: ({ focused }) => (
+        <Ionicons
+            size={24}
+            name={focused ? "book" : "book-outline"} //icon you desired to use, using ternary operator 
+            color={focused ? theme.iconColorFocused : theme.iconColor} //change color based on active/inactive state
+        />
+      ) }}
       />
        <Tabs.Screen 
       name="create" 
-      options={{ title:'Create' }}
+      options={{ title:'Create', tabBarIcon: ({focused}) => (
+        <Ionicons
+            size={24}
+            name={focused ? "create" : "create-outline"} //icon you desired to use, using ternary operator 
+            color={focused ? theme.iconColorFocused : theme.iconColor} //change color based on active/inactive state
+        />
+      ) }}
       />
 
     </Tabs>
