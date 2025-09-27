@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 
 const Books = () => {
     return (
-        <ThemeView style={styles.container}>
+        <ThemeView style={styles.container} safe={true}>
 
             <ThemeText title={true} style={styles.heading}>
                 Your Knowledge Bookshelf

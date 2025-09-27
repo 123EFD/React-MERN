@@ -1,16 +1,33 @@
 import { View, useColorScheme } from 'react-native'
 import {Colors}  from '../constants/Colors'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const ThemeView = ({style, ...props}) => {
+const ThemeView = ({style, safe=false, ...props}) => {
     const colorScheme = useColorScheme()
     const theme = Colors[colorScheme] ?? Colors.dark
+    
+    //if there's no safe prop, return normal view
+    if (!safe) return (
+      <View 
+        style={[{backgroundColor: theme.background}, style]}
+          {...props}
+      />
+    )
 
-  return (
-    <View 
-      style={[{backgroundColor: theme.background}, style]}
-        {...props}
-    />
-  )
+    //this hook returns the space of the content as properties such as top , bottom, left, right
+    const insets = useSafeAreaInsets() 
+
+    return (
+      <View 
+        style={[{
+          backgroundColor: theme.background,
+          paddingTop: insets.top, 
+          paddingBottom: insets.bottom,
+        }, 
+        style]}
+          {...props}
+      />
+    )
 }
 
 export default ThemeView
