@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import { useState } from "react";
 import { account } from "../lib/appwrite";
 import { ID } from "react-native-appwrite";
@@ -9,12 +9,14 @@ export const UserContext = createContext();
 //Provider holds the userState, value and functions, so no need to pass props down manually at every level
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null)
+    const [authChecked, setAuthChecked] = useState(false)
 
     async function login(email, password) {
         try {
-            await account.createEmailSession(email, password)
+            await account.createEmailPasswordSession(email, password)
             const response = await account.get() //reach out the server and grabs the session object (user details)
             setUser(response) //update user state with the response object
+            console.log('has createEmailPasswordSession?', !!account.createEmailPasswordSession);
         } catch (error) {
             throw Error(error.message)
         }
@@ -29,12 +31,28 @@ export function UserProvider({ children }) {
         }
     }
 
-    async function logout() {
-
+    async function logout() { 
+        await account.deleteSession('current') //delete the current session
+        setUser(null) //reset user state to null
     }
 
+    async function getInitialUserValue() {
+        try {
+            const response = await account.get()
+            setUser(response)
+        } catch (error) {
+            setUser(null) //if error, set user to null
+        } finally{
+            setAuthChecked(true) //set authChecked to true after checking the user authentication status
+        }
+    }
+
+    useEffect(() => {
+        getInitialUserValue()
+    }, [])
+    
     return (
-        <UserContext.Provider value={{ user, login, register, logout }}>
+        <UserContext.Provider value={{ user, login, register, logout, authChecked }}>
             {children}
             
         </UserContext.Provider>

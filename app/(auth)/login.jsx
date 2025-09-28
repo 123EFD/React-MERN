@@ -58,7 +58,7 @@ const Login = () => {
             </ThemeButton>
 
             <Spaces/>
-            //if there is an error, show the error message (error!= null)
+            
             {error && <Text style={styles.error}>{error}</Text>} 
 
             <Spaces height={50}/>
@@ -118,3 +118,4 @@ const styles = StyleSheet.create({
 // props instead of passing argument
 //For the pressed argu. in the pressed function create a hover effect when pressed is true
 //useState: to track the state the user types into the email input
+//if there is an error, show the error message (error!= null)

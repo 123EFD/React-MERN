@@ -59,7 +59,7 @@ const Register = () => {
             </ThemeButton>
 
             <Spaces/>
-            //if there is an error, show the error message (error!= null)
+            
             {error && <Text style={styles.error}>{error}</Text>}
 
             <Spaces height={50}/>
