@@ -1,7 +1,7 @@
 import { useUser } from '../../hooks/useUser';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { Text } from 'react-native';
+import ThemeLoader from '../ThemeLoader';
 
 const GuestOnly = ({ children }) => {
     const { user, authChecked } = useUser();
@@ -16,7 +16,7 @@ const GuestOnly = ({ children }) => {
 
     if (!authChecked || user) {
         return (
-            <Text>Loading...</Text> // or a loading spinner
+            <ThemeLoader></ThemeLoader>
         )
     }
 
