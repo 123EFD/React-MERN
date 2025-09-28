@@ -8,7 +8,7 @@ import {Colors} from '../../constants/Colors'
 import ThemeButton from '../../components/ThemeButton'
 import ThemeTextInput from '../../components/ThemeTextInput'
 import { useState } from 'react'
-
+import { useUser } from '../../hooks/useUser'
 
 const Login = () => {
     //first:state value, second:func to update the state value
@@ -16,8 +16,15 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleSubmit = () => {
-        console.log('Login form submitted', email, password)
+    const { login } = useUser()
+
+    const handleSubmit = async () => {
+        try {
+            await login(email, password)
+            
+        } catch (error) {
+            
+        }
     }
 
   return (

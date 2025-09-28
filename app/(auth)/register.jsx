@@ -7,13 +7,22 @@ import Spaces from '../../components/Spaces'
 import ThemeButton from '../../components/ThemeButton'
 import ThemeTextInput from '../../components/ThemeTextInput'
 import { useState } from 'react'
+import { useUser } from '../../hooks/useUser'
 
 const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleSubmit = () => {
-        console.log('register', email, password)
+    //grab the user and the register function
+    const { register } = useUser()
+
+    const handleSubmit = async () => {
+        try {
+            await register(email, password)
+            
+        } catch (error) {
+            
+        }
     }
 
   return (
