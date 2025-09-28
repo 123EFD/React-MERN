@@ -33,14 +33,6 @@ const Home = () => {
             <ThemeText>Profile</ThemeText>
         </Link>
 
-        <Link href="/create" style={styles.link}>
-            <ThemeText>Create</ThemeText>
-        </Link>
-
-        <Link href="/books" style={styles.link}>
-            <ThemeText>Books</ThemeText>
-        </Link>
-
     </ThemeView>
   )
 }
