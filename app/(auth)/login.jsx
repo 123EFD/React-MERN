@@ -15,15 +15,16 @@ const Login = () => {
     //initial state is an empty string/When setEmail('abc'), then email = 'abc'
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState(null)
 
     const { login } = useUser()
 
     const handleSubmit = async () => {
+        setError(null)
         try {
             await login(email, password)
-            
         } catch (error) {
-            
+            setError(error.message)
         }
     }
 
@@ -54,6 +55,10 @@ const Login = () => {
         <ThemeButton onPress={handleSubmit}>
             <Text style={{ color: '#590653' }}>Login</Text>
         </ThemeButton>
+
+        <Spaces/>
+        //if there is an error, show the error message (error!= null)
+        {error && <Text style={styles.error}>{error}</Text>} 
 
         <Spaces height={50}/>
         <Link href='/register'>
@@ -95,6 +100,15 @@ const styles = StyleSheet.create({
     },
     pressed: {
         opacity: 0.7
+    },
+    error:{
+        color: Colors.warning,
+        padding: 10,
+        backgroundColor:'#FCC0DB',
+        borderColor: Colors.warning,
+        borderWidth: 1,
+        borderRadius: 5,
+        marginHorizontal: 10,
     }
 })
 

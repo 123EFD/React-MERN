@@ -8,20 +8,23 @@ import ThemeButton from '../../components/ThemeButton'
 import ThemeTextInput from '../../components/ThemeTextInput'
 import { useState } from 'react'
 import { useUser } from '../../hooks/useUser'
+import { Colors } from '../../constants/Colors'
 
 const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState(null)
 
     //grab the user and the register function
     const { register } = useUser()
 
     const handleSubmit = async () => {
+        setError(null)
         try {
             await register(email, password)
             
         } catch (error) {
-            
+            setError(error.message)
         }
     }
 
@@ -54,6 +57,10 @@ const Register = () => {
             <ThemeButton onPress={handleSubmit}>
                 <Text style={{ color: '#590653' }}>Register</Text>
             </ThemeButton>
+
+            <Spaces/>
+            //if there is an error, show the error message (error!= null)
+            {error && <Text style={styles.error}>{error}</Text>}
 
             <Spaces height={50}/>
             <Link href='/login'>
@@ -88,5 +95,14 @@ const styles = StyleSheet.create({
         marginVertical:20,
         borderBottomWidth: 1,
         color:'#F5517F',
+    },
+    error:{
+        color: Colors.warning,
+        padding: 10,
+        backgroundColor:'#FCC0DB',
+        borderColor: Colors.warning,
+        borderWidth: 1,
+        borderRadius: 5,
+        marginHorizontal: 10,
     }
 })

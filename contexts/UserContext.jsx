@@ -16,7 +16,7 @@ export function UserProvider({ children }) {
             const response = await account.get() //reach out the server and grabs the session object (user details)
             setUser(response) //update user state with the response object
         } catch (error) {
-            console.log(error.message)
+            throw Error(error.message)
         }
     }
 
@@ -25,7 +25,7 @@ export function UserProvider({ children }) {
             await account.create(ID.unique(), email, password)
             await login(email, password) //automatically log in the user after registration
         } catch (error) {
-            console.log(error.message)
+            throw Error(error.message)
         }
     }
 
