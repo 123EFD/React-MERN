@@ -1,4 +1,4 @@
-import {StyleSheet, Text} from 'react-native'
+import {StyleSheet, Text, TouchableWithoutFeedback, Keyboard} from 'react-native'
 //import Spaces from '../components/Spaces'
 import {Link} from 'expo-router'    
 import ThemeText from '../../components/ThemeText'
@@ -29,45 +29,47 @@ const Login = () => {
     }
 
   return (
-    <ThemeView style={styles.container}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}> 
+        <ThemeView style={styles.container}>
 
-        <Spaces/>
-        <ThemeText title={true} style={styles.title}>
-            Login your account
-        </ThemeText>
-
-        <ThemeTextInput 
-        style={{ width: '80%', marginBottom: 20 }}
-        placeholder="Email" 
-        keyboardType="email-address"
-        onChangeText= {setEmail} //same as (text) => setEmail(text)
-        value={email} //two-way data binding->if update email in elsewhere, it still update in the input form
-        />
-
-        <ThemeTextInput 
-        style={{ width: '80%', marginBottom: 20 }}
-        placeholder="Password" 
-        onChangeText= {setPassword} //same as (text) => setEmail(text)
-        value={password} //two-way data binding->if update email in elsewhere, it still update in the input form
-        secureTextEntry //hide the password input using dots
-        />
-
-        <ThemeButton onPress={handleSubmit}>
-            <Text style={{ color: '#590653' }}>Login</Text>
-        </ThemeButton>
-
-        <Spaces/>
-        //if there is an error, show the error message (error!= null)
-        {error && <Text style={styles.error}>{error}</Text>} 
-
-        <Spaces height={50}/>
-        <Link href='/register'>
-            <ThemeText style={{ textAlign:'center' }}>
-                Don't have an account? Register
+            <Spaces/>
+            <ThemeText title={true} style={styles.title}>
+                Login your account
             </ThemeText>
-        </Link>
 
-    </ThemeView>
+            <ThemeTextInput 
+            style={{ width: '80%', marginBottom: 20 }}
+            placeholder="Email" 
+            keyboardType="email-address"
+            onChangeText= {setEmail} //same as (text) => setEmail(text)
+            value={email} //two-way data binding->if update email in elsewhere, it still update in the input form
+            />
+
+            <ThemeTextInput 
+            style={{ width: '80%', marginBottom: 20 }}
+            placeholder="Password" 
+            onChangeText= {setPassword} //same as (text) => setEmail(text)
+            value={password} //two-way data binding->if update email in elsewhere, it still update in the input form
+            secureTextEntry //hide the password input using dots
+            />
+
+            <ThemeButton onPress={handleSubmit}>
+                <Text style={{ color: '#590653' }}>Login</Text>
+            </ThemeButton>
+
+            <Spaces/>
+            //if there is an error, show the error message (error!= null)
+            {error && <Text style={styles.error}>{error}</Text>} 
+
+            <Spaces height={50}/>
+            <Link href='/register'>
+                <ThemeText style={{ textAlign:'center' }}>
+                    Don't have an account? Register
+                </ThemeText>
+            </Link>
+
+        </ThemeView>
+    </TouchableWithoutFeedback>
   )
 }
 
