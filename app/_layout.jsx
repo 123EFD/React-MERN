@@ -1,8 +1,9 @@
 import { Stack } from "expo-router"
-import { StyleSheet, useColorScheme } from "react-native"   
+import { useColorScheme } from "react-native"   
 import {Colors} from '../constants/Colors'
 import { StatusBar } from "expo-status-bar";
 import { UserProvider } from "../contexts/UserContext";
+import { BooksProvider } from "../contexts/BooksContext";
 
 const RootLayout = () => {
     //set dark,light theme
@@ -11,26 +12,27 @@ const RootLayout = () => {
     
   return (
     <UserProvider>
-        <StatusBar value='auto'/>
-        <Stack screenOptions={{
-            headerStyle: { backgroundColor: theme.navBackground },
-            headerTintColor: theme.title,
-            headerTitleStyle: { fontWeight: 'semibold' }
-        }}>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }}></Stack.Screen> 
+      <BooksProvider>
+          <StatusBar value='auto'/>
+          <Stack screenOptions={{
+              headerStyle: { backgroundColor: theme.navBackground },
+              headerTintColor: theme.title,
+              headerTitleStyle: { fontWeight: 'semibold' }
+          }}>
+              <Stack.Screen name="(auth)" options={{ headerShown: false }}></Stack.Screen> 
 
-            <Stack.Screen name="(dashboard)" options={{ headerShown: false }}></Stack.Screen> 
+              <Stack.Screen name="(dashboard)" options={{ headerShown: false }}></Stack.Screen> 
 
-            <Stack.Screen name="index" options={{title: 'Home'}}></Stack.Screen> 
-             
-        </Stack>
+              <Stack.Screen name="index" options={{title: 'Home'}}></Stack.Screen> 
+              
+          </Stack>
+      </BooksProvider>
     </UserProvider>
   )
 }
 
 export default RootLayout
 
-const styles = StyleSheet.create({})
 
 //_layout: expo-route will render the layout file 
 //slot component: to tell the expo router where we want to output the page content within the layout
