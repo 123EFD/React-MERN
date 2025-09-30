@@ -5,10 +5,12 @@ import { StyleSheet, FlatList, Pressable } from "react-native";
 import { useBooks } from "../../hooks/useBooks";
 import ThemeCard from "../../components/ThemeCard";
 import { Colors } from "../../constants/Colors";
+import { useRouter } from "expo-router";
 
 const Books = () => {
     //bring book state from context
     const { books } = useBooks();
+    const router = useRouter();
     return (
         <ThemeView style={styles.container} safe={true}>
 
@@ -22,7 +24,7 @@ const Books = () => {
                 keyExtractor={(item) => item.$id} //unique key for each item in the book array
                 contentContainerStyle={styles.list}
                 renderItem={({item}) => (
-                    <Pressable>
+                    <Pressable onPress={() => router.push(`/books/${item.$id}`)}> {/*redirect link to book details page*/}
                         <ThemeCard style={styles.card}>
                             <ThemeText style={styles.title}>{item.title}</ThemeText>
                             <ThemeText>Written by {item.author}</ThemeText>

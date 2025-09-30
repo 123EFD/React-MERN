@@ -51,6 +51,10 @@ const DashboardLayout = () => {
           />
         ) }}
         />
+        <Tabs.Screen 
+          name="books/[id]" 
+          options={{ href: null}} //hides the tab for dynamic route
+        />
 
       </Tabs>
     </UserOnly>
