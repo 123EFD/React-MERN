@@ -1,7 +1,8 @@
-import { createContext, useState} from "react";
+import { createContext, useEffect, useState} from "react";
 import { databases  } from "../lib/appwrite";
 import { ID, Permission, Role } from "react-native-appwrite";
 import { useUser } from "../hooks/useUser";
+import { Query } from "react-native-appwrite";
 
 const DATABASE_ID = "68da6c0a0011b4fff670"
 const COLLECTION_ID = "68da722d000f4209198d"
@@ -16,7 +17,18 @@ export function BooksProvider({ children }) {
     //fetch all the books
     async function fetchBooks() {
         try {
-            
+            const response = await databases.listDocuments(
+                DATABASE_ID, 
+                COLLECTION_ID,
+                //query subsection of the book record
+                [
+                    Query.equal("userId", user.$id) //only fetch books created by the logged in user
+                ]
+            )
+
+            //return all the books in an array by updating book state
+            setBooks(response.documents);
+            console.log(response.documents);
         } catch (error) {
             console.error(error.message);
         }
@@ -58,6 +70,14 @@ export function BooksProvider({ children }) {
             console.error(error.message);
         }
     }
+
+    useEffect(() => {
+        if (user) {
+            fetchBooks(); //fetch and update book state
+        } else {
+            setBooks([]); //clear book state when user log out
+        }
+    }, [user]) //when user log in , book will be fetch right away 
 
     //value specify objects to dif. properties (pass functions and state above)
     return (
