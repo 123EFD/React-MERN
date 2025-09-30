@@ -1,8 +1,7 @@
 import { createContext, useEffect, useState} from "react";
-import { databases  } from "../lib/appwrite";
-import { ID, Permission, Role } from "react-native-appwrite";
+import { databases ,client } from "../lib/appwrite";
+import { ID, Permission, Role, Query } from "react-native-appwrite";
 import { useUser } from "../hooks/useUser";
-import { Query } from "react-native-appwrite";
 
 const DATABASE_ID = "68da6c0a0011b4fff670"
 const COLLECTION_ID = "68da722d000f4209198d"
@@ -72,12 +71,32 @@ export function BooksProvider({ children }) {
     }
 
     useEffect(() => {
+        //real-time listener to listen to any changes in the book collection
+        let unsubscribe
+        //channel(identifier to service on the server we want to subcribe to such database events)
+        // for subcribe path format in the books collections
+        const channel = `databases.${DATABASE_ID}.collections.${COLLECTION_ID}.documents`
         if (user) {
             fetchBooks(); //fetch and update book state
+
+            unsubscribe = client.subscribe(channel, (response) => {
+                const {payload, events} = response //payload contain data associated with event such added or deleted book event
+                
+                //update the state current using payload and events, the first[0] event in the array is the create or delete etc.
+                //to search the specific event, use includes() to input keyword
+                if (events[0].includes('create')) {
+                    //update book state using payload
+                    setBooks((prevBooks) => [...prevBooks, payload])
+                }
+            }) 
         } else {
-            setBooks([]); //clear book state when user log out
+            setBooks([]) //clear book state when user log out
         }
-    }, [user]) //when user log in , book will be fetch right away 
+
+        return() => {
+            if (unsubscribe) unsubscribe() //clean up function to unsubscribe from the real-time listener
+        }
+    }, [user]) //when user log in(sub) or log out(unsub) , book will be fetch right away 
 
     //value specify objects to dif. properties (pass functions and state above)
     return (
