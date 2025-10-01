@@ -1,7 +1,7 @@
 //dynamic routes for book page based on book id
 //When access the book details, we need to access the ID of the book from the route(to use bookID to fetch the database)
-import { StyleSheet} from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { StyleSheet, Text} from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import { useBooks } from '../../../hooks/useBooks'
 //theme components
@@ -10,7 +10,8 @@ import ThemeText from '../../../components/ThemeText'
 import ThemeCard from '../../../components/ThemeCard'
 import ThemeLoader from '../../../components/ThemeLoader'
 import Spaces from '../../../components/Spaces'
-/*import ThemeButton from '../../../components/ThemeButton'*/
+import ThemeButton from '../../../components/ThemeButton'
+import { Colors } from '../../../constants/Colors'
 
 const BooksDetails = () => {
   const [books, setBooks] = useState(null)
@@ -19,7 +20,15 @@ const BooksDetails = () => {
     // can be destructured within the routes(which matches the [id] in the file name)
     const { id } = useLocalSearchParams() 
 
-    const { fetchBooksById } = useBooks()
+    const { fetchBooksById, deleteBooks } = useBooks() //from the BooksContext
+
+    const router = useRouter()
+
+    const handleDelete = async () => {
+      await deleteBooks(id)
+      setBooks(null)
+      router.push('/books') //redirect to book list after delete
+    }
 
     //useEffect to run the first loads component and when the ID value changes 
     useEffect(() => {
@@ -53,6 +62,10 @@ const BooksDetails = () => {
 
         <ThemeText>{books.description}</ThemeText>
       </ThemeCard>
+
+      <ThemeButton style={styles.delete} onPress={handleDelete}>
+        <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Delete Books</Text>
+      </ThemeButton>
     </ThemeView>
   )
 }
@@ -70,6 +83,12 @@ const styles = StyleSheet.create({
     },
     card: {
       margin: 20,
+    },
+    delete: {
+      marginTop: 'auto',
+      backgroundColor: Colors.warning,
+      width: '90%',
+      alignSelf: 'center',
     }
 })
 

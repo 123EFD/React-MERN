@@ -71,7 +71,11 @@ export function BooksProvider({ children }) {
 
     async function deleteBooks(id) {
         try {
-            
+            await databases.deleteDocument(
+                DATABASE_ID,
+                COLLECTION_ID,
+                id
+            )
         } catch (error) {
             console.error(error.message);
         }
@@ -94,6 +98,11 @@ export function BooksProvider({ children }) {
                 if (events[0].includes('create')) {
                     //update book state using payload
                     setBooks((prevBooks) => [...prevBooks, payload])
+                }
+                //realtime event when create/delete
+                if (events[0].includes('delete')) {
+                    //filter out the deleted book from the state
+                    setBooks((prevBooks) => prevBooks.filter((book) => book.$id !== payload.$id)) 
                 }
             }) 
         } else {
