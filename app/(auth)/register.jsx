@@ -68,7 +68,6 @@ const Register = () => {
                     Don't have an account? Register
                 </ThemeText>
             </Link>
-
         </ThemeView>
     </TouchableWithoutFeedback>
   )

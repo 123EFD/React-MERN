@@ -1,6 +1,6 @@
 {
   "expo": {
-    "scheme": "mybookapp", // this is for link name: mybookapp://
+    "scheme": "mybookapp",
     "name": "React-MERN",
     "slug": "React-MERN",
     "version": "1.0.0",
@@ -27,7 +27,14 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      "expo-web-browser"
+    ],
+    "extra": {
+      "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
+      "APPWRITE_PROJECT_ID": "68d3e082003d65757c6f",
+      "APPWRITE_DATABASE_ID": "68da6c0a0011b4fff670",
+      "APPWRITE_BOOKS_COLLECTION_ID": "68da722d000f4209198d"
+    }
   }
 }

@@ -85,7 +85,7 @@ const Create = () => {
 
 export default Create
 
-const styles  =StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
         flex: 1,
         alignItems: 'center',
@@ -100,7 +100,7 @@ const styles  =StyleSheet.create({
         padding: 20,
         borderRadius: 6,
         alignSelf: 'stretch',
-        marginerHorizontal: 40,
+        marginHorizontal: 40,
     },
     multiline: {
         padding: 20,

@@ -39,7 +39,7 @@ const Books = () => {
 
 export default Books
 
-const styles  =StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
         flex: 1,
         alignItems: 'center',
@@ -63,10 +63,11 @@ const styles  =StyleSheet.create({
         borderLeftWidth: 4
     },
     title: {
-        fonstSize: 16,
+        fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 10,
     },
 })
 
 //to access the book state from the book page ,output the book list using flatlist(natvie comp.)
+
