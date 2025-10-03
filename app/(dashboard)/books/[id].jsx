@@ -120,10 +120,10 @@ const BooksDetails = () => {
       />
       <Spaces/>
       <ThemeButton onPress={saveEdit}>
-          <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Save Changes</Text>
+          <ThemeText style={{color: '#6B0106',fontWeight:'bold', textAlign: 'center', fontSize: 15}}>Save Changes</ThemeText>
       </ThemeButton>
       <ThemeButton onPress={cancelEdit} style={{ backgroundColor: '#E9B2B4' }}>
-          <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Cancel Changes</Text>
+          <ThemeText style={{color: '#6B0106',fontWeight:'bold', textAlign: 'center', fontSize: 15}}>Cancel Changes</ThemeText>
       </ThemeButton>
     </>
   )}
@@ -132,10 +132,10 @@ const BooksDetails = () => {
       {!isEditing && ( //conditionally render if in view mode
       <>
         <ThemeButton onPress={startEdit} style={{ width: '90%', alignSelf: 'center' }}>
-            <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Edit Books</Text>
+            <ThemeText style={{color: '#6B0106',fontWeight:'bold', textAlign: 'center', fontSize: 15}}>Edit Books</ThemeText>
         </ThemeButton>
         <ThemeButton style={styles.delete} onPress={handleDelete}>
-          <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Delete Books</Text>
+          <ThemeText style={{fontWeight:'bold', textAlign: 'center', fontSize: 15}}>Delete Books</ThemeText>
         </ThemeButton>
       </>
       )}

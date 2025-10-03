@@ -90,7 +90,7 @@ export function BooksProvider({ children }) {
                 id,
                 data
             );
-            return updated
+            return updated;
         } catch (error) {
             console.error(error.message);
         }
