@@ -63,7 +63,8 @@ export function BooksProvider({ children }) {
                     Permission.update(Role.user(user.$id)),
                     Permission.delete(Role.user(user.$id)), 
                 ]
-            ) 
+            );
+            return newBook;
         } catch (error) {
             console.error(error.message);
         }
@@ -76,6 +77,20 @@ export function BooksProvider({ children }) {
                 COLLECTION_ID,
                 id
             )
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    async function updateBooks(id, data) {
+        try {
+            const updated = await databases.updateDocument(
+                DATABASE_ID,
+                COLLECTION_ID,
+                id,
+                data
+            );
+            return updated
         } catch (error) {
             console.error(error.message);
         }
@@ -104,6 +119,9 @@ export function BooksProvider({ children }) {
                     //filter out the deleted book from the state
                     setBooks((prevBooks) => prevBooks.filter((book) => book.$id !== payload.$id)) 
                 }
+                if (events[0].includes('update')) {
+                    setBooks((prevBooks) => prevBooks.map((book) => book.$id === payload.$id ? payload : book))
+                }
             }) 
         } else {
             setBooks([]) //clear book state when user log out
@@ -117,7 +135,7 @@ export function BooksProvider({ children }) {
     //value specify objects to dif. properties (pass functions and state above)
     return (
         <BooksContext.Provider
-            value={{books, fetchBooks, fetchBooksById, createBooks, deleteBooks}}
+            value={{books, fetchBooks, fetchBooksById, createBooks, deleteBooks, updateBooks}}
         >
             {children}
         </BooksContext.Provider>

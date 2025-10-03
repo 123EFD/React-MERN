@@ -12,15 +12,20 @@ import ThemeLoader from '../../../components/ThemeLoader'
 import Spaces from '../../../components/Spaces'
 import ThemeButton from '../../../components/ThemeButton'
 import { Colors } from '../../../constants/Colors'
+import ThemeTextInput from '../../../components/ThemeTextInput'
 
 const BooksDetails = () => {
   const [books, setBooks] = useState(null)
+  const [ isEditing, setIsEditing ] = useState(false)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [description, setDescription] = useState('')
 
     //inside the curly braces, any of the route parameter 
     // can be destructured within the routes(which matches the [id] in the file name)
     const { id } = useLocalSearchParams() 
 
-    const { fetchBooksById, deleteBooks } = useBooks() //from the BooksContext
+    const { fetchBooksById, deleteBooks, updateBooks } = useBooks() //from the BooksContext
 
     const router = useRouter()
 
@@ -30,6 +35,30 @@ const BooksDetails = () => {
       router.push('/books') //redirect to book list after delete
     }
 
+    const startEdit = () => {
+      if (!books) return
+      //set book's details as initial values
+      setTitle(books.title ?? '')
+      setAuthor(books.author ?? '')
+      setDescription(books.description ?? '')
+      setIsEditing(true)
+    }
+
+    //"cancel" button to exit edit mode
+    const cancelEdit = () => {
+      setIsEditing(false)
+    }
+    
+    const saveEdit = async () => {
+      const data = {
+        title: title?.trim(),
+        author: author?.trim(),
+        description: description?.trim(),
+      }
+      const updated = await updateBooks(id, data)
+      setBooks(updated)
+      setIsEditing(false) //exit edit mode
+    }
     //useEffect to run the first loads component and when the ID value changes 
     useEffect(() => {
           //fetch book needed
@@ -53,22 +82,67 @@ const BooksDetails = () => {
   return (
     <ThemeView safe={true} style={styles.container}>
       <ThemeCard style={styles.card}>
-        <ThemeText style={styles.title}>{books.title}</ThemeText>
-        <ThemeText>Written by {books.author}</ThemeText>
-        <Spaces/>
+        {!isEditing ? (
+          <>
+            <ThemeText style={styles.title}>{books.title}</ThemeText>
+            <ThemeText>Written by {books.author}</ThemeText>
+            <Spaces/>
 
-        <ThemeText title={true}>Book description:</ThemeText>
-        <Spaces height={10}/>
+            <ThemeText title={true}>Book description:</ThemeText>
+            <Spaces height={10}/>
 
-        <ThemeText>{books.description}</ThemeText>
+            <ThemeText>{books.description}</ThemeText>
+        </>
+  ) : ( //in edit mode
+    <>
+      <ThemeText title={true} style={styles.title}>Edit Books</ThemeText>
+      <Spaces height={6}/>
+      <ThemeTextInput 
+        style={styles.input}
+        placeholder='Title'
+        value={title}
+        onChangeText={setTitle}
+      />
+      <Spaces />
+      <ThemeTextInput 
+        style={styles.input}
+        placeholder='Author'
+        value={author}
+        onChangeText={setAuthor}
+      />
+      <Spaces />
+      <ThemeTextInput 
+        style={styles.input}
+        placeholder='Description'
+        value={description}
+        onChangeText={setDescription}
+        multiline
+      />
+      <Spaces/>
+      <ThemeButton onPress={saveEdit}>
+          <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Save Changes</Text>
+      </ThemeButton>
+      <ThemeButton onPress={cancelEdit} style={{ backgroundColor: '#E9B2B4' }}>
+          <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Cancel Changes</Text>
+      </ThemeButton>
+    </>
+  )}
       </ThemeCard>
 
-      <ThemeButton style={styles.delete} onPress={handleDelete}>
-        <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Delete Books</Text>
-      </ThemeButton>
+      {!isEditing && ( //conditionally render if in view mode
+      <>
+        <ThemeButton onPress={startEdit} style={{ width: '90%', alignSelf: 'center' }}>
+            <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Edit Books</Text>
+        </ThemeButton>
+        <ThemeButton style={styles.delete} onPress={handleDelete}>
+          <Text style={{color: '#6B0106', textAlign: 'center', fontSize: 15}}>Delete Books</Text>
+        </ThemeButton>
+      </>
+      )}
     </ThemeView>
-  )
-}
+    )
+  }
+  
 
 export default BooksDetails
 
@@ -89,7 +163,20 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.warning,
       width: '90%',
       alignSelf: 'center',
-    }
+    },
+    input: {
+        padding: 20,
+        borderRadius: 6,
+        alignSelf: 'stretch',
+        marginHorizontal: 40,
+    },
+    multiline: {
+        padding: 20,
+        borderRadius: 6,
+        minHeight: 100,
+        alignSelf: 'stretch',
+        marginHorizontal: 40,
+    },
 })
 
 //link to the page from each individual book inside the book list 
