@@ -21,9 +21,11 @@ export function BooksProvider({ children }) {
                 COLLECTION_ID,
                 //query subsection of the book record
                 [
-                    Query.equal("userId", user.$id) //only fetch books created by the logged in user
+                    Query.equal("userId", user.$id), //only fetch books created by the logged in user
+                    Query.orderDesc("$createdAt"), //order by created time, latest first
+                    Query.limit(100) 
                 ]
-            )
+            );
 
             //return all the books in an array by updating book state
             setBooks(response.documents);
@@ -108,21 +110,27 @@ export function BooksProvider({ children }) {
             unsubscribe = client.subscribe(channel, (response) => {
                 const {payload, events} = response //payload contain data associated with event such added or deleted book event
                 
-                //update the state current using payload and events, the first[0] event in the array is the create or delete etc.
-                //to search the specific event, use includes() to input keyword
-                if (events[0].includes('create')) {
+                //.some iterates through every event in the events array;
+                //.endsWith precisely targets the actual event type suffix
+                const isCreate = events.some((e) => e.endsWith(".create"));
+                const isDelete = events.some((e) => e.endsWith(".delete"));
+                const isUpdate = events.some((e) => e.endsWith(".update"));
+
+                if (isCreate) {
+                    setBooks((prev) => {
+                        if (prev.find((b) => b.$id === payload.$id)) return prev;
+                        return [payload, ...prev];
+                    });
+
+                    //filter out the book that was deleted using the payload.$id
+                    } else if (isDelete) {
+                    setBooks((prev) => prev.filter((b) => b.$id !== payload.$id));
+
                     //update book state using payload
-                    setBooks((prevBooks) => [...prevBooks, payload])
-                }
-                //realtime event when create/delete
-                if (events[0].includes('delete')) {
-                    //filter out the deleted book from the state
-                    setBooks((prevBooks) => prevBooks.filter((book) => book.$id !== payload.$id)) 
-                }
-                if (events[0].includes('update')) {
-                    setBooks((prevBooks) => prevBooks.map((book) => book.$id === payload.$id ? payload : book))
-                }
-            }) 
+                    } else if (isUpdate) {
+                    setBooks((prev) => prev.map((b) => (b.$id === payload.$id ? payload : b)));
+                    }
+                });
         } else {
             setBooks([]) //clear book state when user log out
         }
