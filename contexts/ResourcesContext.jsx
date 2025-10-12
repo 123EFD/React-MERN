@@ -15,7 +15,7 @@ export const ResourcesContext = createContext();
 
 export function ResourcesProvider( {children} ) {
     const { user } = useUser();
-    csont [resources, setResources] = useState([]);
+    const [resources, setResources] = useState([]);
     const [filter, setFilter] = useState({
         type:null, //book,video,course
         status:null, //to-read, reading,finished
@@ -160,7 +160,7 @@ export function ResourcesProvider( {children} ) {
         
 
     return (
-        <BooksContext.Provider
+        <Resources.Provider
             value={{
                 filter,
                 setFilter,
@@ -169,12 +169,12 @@ export function ResourcesProvider( {children} ) {
                 updateResources,
                 deleteResources,
                 fetchResourcesById,
+                resources: normalizedResources,
                 getProgressChartData,
                 getCategoryBreakdown,
                 getStatusBreakdown,
             }}
         >
             {children}
-        </BooksContext.Provider>
+        </Resources.Provider>
     );
-

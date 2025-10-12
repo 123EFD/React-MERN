@@ -4,6 +4,7 @@ import {Colors} from '../constants/Colors'
 import { StatusBar } from "expo-status-bar";
 import { UserProvider } from "../contexts/UserContext";
 import { BooksProvider } from "../contexts/BooksContext";
+import { ResourcesProvider } from "../contexts/ResourcesContext";
 
 const RootLayout = () => {
     //set dark,light theme
@@ -12,21 +13,23 @@ const RootLayout = () => {
     
   return (
     <UserProvider>
-      <BooksProvider>
-          <StatusBar value='auto'/>
-          <Stack screenOptions={{
-              headerStyle: { backgroundColor: theme.navBackground },
-              headerTintColor: theme.title,
-              headerTitleStyle: { fontWeight: 'semibold' }
-          }}>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }}></Stack.Screen> 
+      <ResourcesProvider>
+        <BooksProvider>
+            <StatusBar value='auto'/>
+            <Stack screenOptions={{
+                headerStyle: { backgroundColor: theme.navBackground },
+                headerTintColor: theme.title,
+                headerTitleStyle: { fontWeight: 'semibold' }
+            }}>
+                <Stack.Screen name="(auth)" options={{ headerShown: false }}></Stack.Screen> 
 
-              <Stack.Screen name="(dashboard)" options={{ headerShown: false }}></Stack.Screen> 
+                <Stack.Screen name="(dashboard)" options={{ headerShown: false }}></Stack.Screen> 
 
-              <Stack.Screen name="index" options={{title: 'Home'}}></Stack.Screen> 
-              
-          </Stack>
-      </BooksProvider>
+                <Stack.Screen name="index" options={{title: 'Home'}}></Stack.Screen> 
+                
+            </Stack>
+        </BooksProvider>
+        </ResourcesProvider>
     </UserProvider>
   )
 }
