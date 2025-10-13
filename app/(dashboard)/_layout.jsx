@@ -56,6 +56,11 @@ const DashboardLayout = () => {
           options={{ href: null}} //hides the tab for dynamic route
         />
 
+        <Tabs.Screen
+          name="Charts/ProgressLineChart"
+          options={{ title: 'Progress Chart'}}
+        />
+
       </Tabs>
     </UserOnly>
   )
