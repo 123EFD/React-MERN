@@ -4,6 +4,9 @@ import { StyleSheet} from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import { useResources } from '../../../hooks/useResources'
+import MultiSelect from 'react-native-multiple-select'
+
+
 //theme components
 import ThemeView from '../../../components/ThemeView'
 import ThemeText from '../../../components/ThemeText'
@@ -13,6 +16,16 @@ import Spaces from '../../../components/Spaces'
 import ThemeButton from '../../../components/ThemeButton'
 import { Colors } from '../../../constants/Colors'
 import ThemeTextInput from '../../../components/ThemeTextInput'
+
+import { RESOURCE_TYPES, STATUS, PRIORITIES, PROGRESS_MODES } from '../../../contexts/ResourcesContext'
+
+const categoriesOptions = [
+  "AI", "Computer Organization", "Programming", "Computing Math", "Human Computer Interaction", 
+  "Data Science", "Web Development", "Mobile Development", "Game Development", "Cybersecurity", 
+  "Networking", "Databases", "Cloud Computing", "Software Engineering", "Operating Systems", 
+  "DevOps", "Project Management", "Agile Methodologies", "UI/UX Design", "Digital Marketing", 
+  "Tech News"
+];
 
 const resourcesDetailScreen = () => {
   const [resources, setResources] = useState(null)
@@ -25,7 +38,9 @@ const resourcesDetailScreen = () => {
   const [status, setStatus] = useState('')
   const [priority, setPriority] = useState('')
   const [categories, setaCategories] = useState([])
-  const [unitsCompleted, setUnitsCompleted] = useState(0)
+  // { hours: { completed: 2, total: 10 }, videos: { completed: 5, total: 20 } }
+  const [unitsCompleted, setUnitsCompleted] = useState({}) //Object dynamic numeric inputs per mode
+  const [progressMode, setProgressMode ] = useState([])
 
     //inside the curly braces, any of the route parameter 
     // can be destructured within the routes(which matches the [id] in the file name)
@@ -50,7 +65,8 @@ const resourcesDetailScreen = () => {
       setStatus(resources.status ?? '')
       setPriority(resources.priority ?? '')
       setaCategories(resources.categories ?? [])
-      setUnitsCompleted(resources.unitsCompleted ?? 0)
+      setProgressMode(resources.progressMode ?? [])
+      setUnitsCompleted(resources.unitsCompleted ?? {})
       setIsEditing(true)
     }
 
@@ -67,6 +83,7 @@ const resourcesDetailScreen = () => {
         status,
         priority,
         categories,
+        progressMode,
         unitsCompleted: Number(unitsCompleted),
       };
       const updated = await updateResources(id, data)
@@ -93,6 +110,20 @@ const resourcesDetailScreen = () => {
       );
     }
 
+    //Helper to display progress for each mode
+    const renderProgressDetails = () => {
+      if (!resources.progressMode || !resources.unitsCompleted) return null;
+      return resources.progressMode.map(mode => {
+        const modeData = resources.unitsCompleted[mode] || {};
+        return(
+          <ThemeText key={mode}>
+            {mode} : {modeData.completed ?? 0} / {modeData.total ?? 0} ({modelData.total ? Math.round((modeData.completed ?? 0) / modeData.total * 100) : 0}%)
+          
+          </ThemeText>
+        ) 
+      })
+    }
+
   return (
     <ThemeView safe={true} style={styles.container}>
       <ThemeCard style={styles.card}>
@@ -106,9 +137,10 @@ const resourcesDetailScreen = () => {
             <ThemeText>Status: {resources.status}</ThemeText>
             <ThemeText>Priority: {resources.priority}</ThemeText>
             <ThemeText>Categories: {resources.categories?.join(', ')}</ThemeText> 
-            <ThemeText> Progress: {resources.unitsCompleted} / {resources.totalUnits} {resources.progressMode}
-              {" "}({resources.progressPercent ? `${Math.round(resources.progressPercent)}%` : 'N/A'  })
-            </ThemeText>
+            <ThemeText>Progress Modes: {resources.progressMode?.join(', ')}</ThemeText>
+            {renderProgressDetails()}
+          
+            <progressMode className="map"></progressMode>
 
             {/*Show the resource link*/} 
             {resources.url && (
@@ -157,36 +189,94 @@ const resourcesDetailScreen = () => {
         multiline
       />
       <Spaces/>
-      <ThemeTextInput 
-        style={styles.input}
-        placeholder='Status'
-        value={status}
-        onChangeText={setStatus}
+      <ThemeText>Status</ThemeText>
+      <MultiSelect
+        items={STATUS.map(s => ({ id: s, name: s}))}
+        uniqueKey="id" //track order changes, update and remove
+        single //Single select for Status
+        onSelectedItemsChange = {items => setStatus(items[0] || '')} //only one item
+        selectedItems={status ? [status] : []} //wrap in array for single select
+        selectText="Select Status"
+        displayKey="Search Status..." //display placeholder/content
+        styleDropdownMenuSubsection={{ paddingLeft: 10, 
+          paddingRight: 10, 
+          borderRadius: 6, 
+          borderWidth: 1, 
+          borderColor: '#ccc', 
+          height: 50, 
+          alignItems: 'center' }}
+      />
+
+      <Spaces/>
+      <ThemeText>Priority</ThemeText>
+      <MultiSelect
+        items={PRIORITIES.map(p => ({ id:p, name:p}))}
+        uniqueKey="id" //track order changes, update and remove
+        single //Single select for Status
+        onSelectedItemsChange = {items => setPriority(items[0] || '')} 
+        selectedItems={priority ? [priority] : []} 
+        selectText="Select Priority"
+        displayKey="Search Priority..." 
+        styleDropdownMenuSubsection={{ marginVertical: 8 }}
+
       />
       <Spaces/>
-      <ThemeTextInput 
-        style={styles.input}
-        placeholder='[Priority]'
-        value={priority}
-        onChangeText={setPriority}
+      <ThemeText>Categories</ThemeText>
+      <MultiSelect
+        items={categoriesOptions.map(cat => ({ id:cat, name:cat}))}
+        uniqueKey="id" //track order changes, update and remove
+        single //Single select for Status
+        onSelectedItemsChange = {setaCategories} 
+        selectedItems={categories} 
+        selectText="Select Categories"
+        displayKey="Search Categories..." 
+        styleDropdownMenuSubsection={{ marginVertical: 8 }}
       />
       <Spaces/>
-      <ThemeTextInput 
-        style={styles.input}
-        placeholder='Categories'
-        value={categories.join(', ')}
-        onChangeText={text => setaCategories(text.split(',').map(c => c.trim()).filter(Boolean))} //split by comma and trim spaces
-      />
-      <Spaces/>
-      <ThemeTextInput 
-        style={styles.input}
-        placeholder={`Units Completed (${resources.progressMode})`}
-        value={unitsCompleted?.toString()}
-        onChangeText={val => setUnitsCompleted(Number(val))}
-        keyboardType='numeric'
+      <ThemeText>Progress Mode</ThemeText>
+      <MultiSelect
+        items={PROGRESS_MODES.map(m => ({ id:m, name:m}))}
+        uniqueKey="id" //track order changes, update and remove
+        single //Single select for Status
+        onSelectedItemsChange = {setProgressMode} 
+        selectedItems={progressMode} 
+        selectText="Select Pick Modes"
+        displayKey="name" 
+        styleDropdownMenuSubsection={{ marginVertical: 8 }}
       />
       <Spaces/>
 
+      {/*Let users select multiple progress modes, ensure accurate tracking and 
+      visualization to specify their progress for each selected mode*/}
+      {progressMode.map(mode => (
+        <View key={mode} stlye={{ marginBottom: 12}}>
+          <ThemeText>{mode} Progress:</ThemeText>
+          <ThemeTextInput
+              placeholder={`Completed ${mode}`}
+              value={unitsCompleted[mode]?.completed?.toString() || ''}
+              keyboardType='numeric'
+              onChangeText={val => 
+                setUnitsCompleted(prev => ({
+                  ...prev,
+                  [mode] : {...prev[mode], completed: Number(val)}
+                }))
+              }
+          />
+          <ThemeTextInput
+            placeholder={`Total ${mode}`}
+            value={unitsCompleted[mode]?.total?.toString() || ''}
+            keyboardType='numeric'
+            onChangeText={val =>
+              setUnitsCompleted(prev => ({
+                ...prev,
+                  [mode] : {...prev[mode], completed: Number(val)}
+              }))
+            }
+          />
+        </View>
+      ))}
+      
+      <Spaces/>
       <ThemeButton onPress={saveEdit}>
           <ThemeText style={{color: '#6B0106',fontWeight:'bold', textAlign: 'center', fontSize: 15}}>Save Changes</ThemeText>
       </ThemeButton>

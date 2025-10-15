@@ -8,8 +8,12 @@ import {
     breakdownResourcesByCategory,
     breakdownResourcesByStatus
 } from "../helpers/progress";
-import { get } from "lodash";
 
+//Constants for enum values for filtering
+export const RESOURCE_TYPES = ["book", "video", "course", "pdf", "link"];
+export const STATUS = ["to-read", "reading", "finished"];
+export const PRIORITIES = ["low","medium" ,"high" ];
+export const PROGRESS_MODES = ["pages","chapters", "percent", "videos", "lessons", "minutes", "hours"];
 
 export const ResourcesContext = createContext();
 
