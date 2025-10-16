@@ -1,7 +1,7 @@
 import ProgressLineChart from "../../../components/Charts/ProgressLineChart";
 import StatusBarChart from "../../../components/Charts/StatusBarChart";
 import CategoryPieChart from "../../../components/Charts/CategoryPieChart";
-import ThemeText from "../../components/ThemeText";
+import ThemeText from "../../../components/ThemeText";
 import Spaces from "../../../components/Spaces";
 import { format } from "date-fns";
 import { ScrollView } from "react-native-gesture-handler";

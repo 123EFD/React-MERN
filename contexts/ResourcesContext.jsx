@@ -34,7 +34,7 @@ export function ResourcesProvider( {children} ) {
         //always filter by the current user 
         const q = [Query.equal("userId", user.$id), Query.limit(100), Query.orderDesc("$createdAt")];
         if (filter.type) q.push(Query.equal("type", filter.type));
-        if (filter.status) q.push(Query,equal("status", filter.status));
+        if (filter.status) q.push(Query.equal("status", filter.status));
         if (filter.priority) q.push(Query.equal("priority", filter.priority));
         if (filter.category) q.push(Query.contains("categories", filter.category));
         if (filter.q) q.push(Query.search("title", filter.q));
@@ -74,7 +74,7 @@ export function ResourcesProvider( {children} ) {
         return doc;
     }
 
-    async function updateResources() {
+    async function updateResources(id, data) {
         const updated = await databases.updateDocument(
             ids.databaseId,
             ids.resourcesCollectionId,
@@ -98,7 +98,6 @@ export function ResourcesProvider( {children} ) {
             id
         );
     }
-}
     
     useEffect(() => {
         //real-time listener to listen to any changes in the book collection
@@ -110,7 +109,7 @@ export function ResourcesProvider( {children} ) {
 
         //channel(identifier to service on the server we want to subcribe to such database events)
         // for subcribe path format in the books collections
-        const channel = `databases.${ids.databaseId}.collections.${ids.resourcesBucketId}.documents`
+        const channel = `databases.${ids.databaseId}.collections.${ids.resourcesCollectionId}.documents`
         const unsubscribe = client.subscribe(channel, (response) => {
                 const {payload, events} = response //payload contain data associated with event such added or deleted book event
                 //.some iterates through every event in the events array;
@@ -162,9 +161,8 @@ export function ResourcesProvider( {children} ) {
                 return breakdownResourcesByStatus(normalizedResources);
             }
         
-
     return (
-        <Resources.Provider
+        <ResourcesContext.Provider
             value={{
                 filter,
                 setFilter,
@@ -180,5 +178,6 @@ export function ResourcesProvider( {children} ) {
             }}
         >
             {children}
-        </Resources.Provider>
+        </ResourcesContext.Provider>
     );
+}
