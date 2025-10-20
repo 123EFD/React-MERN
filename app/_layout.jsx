@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { Stack } from "expo-router"
 import { useColorScheme } from "react-native"   
 import {Colors} from '../constants/Colors'
@@ -5,6 +6,11 @@ import { StatusBar } from "expo-status-bar";
 import { UserProvider } from "../contexts/UserContext";
 import { BooksProvider } from "../contexts/BooksContext";
 import { ResourcesProvider } from "../contexts/ResourcesContext";
+
+useEffect(() => {
+  // eslint-disable-next-line no-console
+  console.log('NativeReanimated:', require('react-native').NativeModules?.NativeReanimated);
+}, []);
 
 const RootLayout = () => {
     //set dark,light theme
@@ -29,7 +35,7 @@ const RootLayout = () => {
                 
             </Stack>
         </BooksProvider>
-        </ResourcesProvider>
+      </ResourcesProvider>
     </UserProvider>
   )
 }

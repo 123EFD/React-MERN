@@ -37,7 +37,7 @@ const resourcesDetailScreen = () => {
   const [notes, setNotes] = useState('')
   const [status, setStatus] = useState('')
   const [priority, setPriority] = useState('')
-  const [categories, setaCategories] = useState([])
+  const [categories, setCategories] = useState([])
   // { hours: { completed: 2, total: 10 }, videos: { completed: 5, total: 20 } }
   const [unitsCompleted, setUnitsCompleted] = useState({}) //Object dynamic numeric inputs per mode
   const [progressMode, setProgressMode ] = useState([])
@@ -64,7 +64,7 @@ const resourcesDetailScreen = () => {
       setNotes(resources.notes ?? '')
       setStatus(resources.status ?? '')
       setPriority(resources.priority ?? '')
-      setaCategories(resources.categories ?? [])
+      setCategories(resources.categories ?? [])
       setProgressMode(resources.progressMode ?? [])
       setUnitsCompleted(resources.unitsCompleted ?? {})
       setIsEditing(true)
@@ -84,7 +84,7 @@ const resourcesDetailScreen = () => {
         priority,
         categories,
         progressMode,
-        unitsCompleted: Number(unitsCompleted),
+        unitsCompleted,
       };
       const updated = await updateResources(id, data)
       setResources(updated)
@@ -117,7 +117,7 @@ const resourcesDetailScreen = () => {
         const modeData = resources.unitsCompleted[mode] || {};
         return(
           <ThemeText key={mode}>
-            {mode} : {modeData.completed ?? 0} / {modeData.total ?? 0} ({modelData.total ? Math.round((modeData.completed ?? 0) / modeData.total * 100) : 0}%)
+            {mode} : {modeData.completed ?? 0} / {modeData.total ?? 0} ({modeData.total ? Math.round((modeData.completed ?? 0) / modeData.total * 100) : 0}%)
           
           </ThemeText>
         ) 
@@ -225,8 +225,7 @@ const resourcesDetailScreen = () => {
       <MultiSelect
         items={categoriesOptions.map(cat => ({ id:cat, name:cat}))}
         uniqueKey="id" //track order changes, update and remove
-        single //Single select for Status
-        onSelectedItemsChange = {setaCategories} 
+        onSelectedItemsChange = {setCategories} 
         selectedItems={categories} 
         selectText="Select Categories"
         displayKey="Search Categories..." 
@@ -237,7 +236,6 @@ const resourcesDetailScreen = () => {
       <MultiSelect
         items={PROGRESS_MODES.map(m => ({ id:m, name:m}))}
         uniqueKey="id" //track order changes, update and remove
-        single //Single select for Status
         onSelectedItemsChange = {setProgressMode} 
         selectedItems={progressMode} 
         selectText="Select Pick Modes"
@@ -249,7 +247,7 @@ const resourcesDetailScreen = () => {
       {/*Let users select multiple progress modes, ensure accurate tracking and 
       visualization to specify their progress for each selected mode*/}
       {progressMode.map(mode => (
-        <View key={mode} stlye={{ marginBottom: 12}}>
+        <View key={mode} style={{ marginBottom: 12}}>
           <ThemeText>{mode} Progress:</ThemeText>
           <ThemeTextInput
               placeholder={`Completed ${mode}`}
@@ -269,7 +267,7 @@ const resourcesDetailScreen = () => {
             onChangeText={val =>
               setUnitsCompleted(prev => ({
                 ...prev,
-                  [mode] : {...prev[mode], completed: Number(val)}
+                  [mode] : {...prev[mode], total: Number(val)}
               }))
             }
           />

@@ -1,6 +1,5 @@
 import {useResources} from '../../hooks/useResources';
 import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis } from 'victory-native';
-import { format } from 'date-fns';
 
 export default function ProgressLineChart({ startDate, endDate }) {
     const { getProgressChartData } = useResources();

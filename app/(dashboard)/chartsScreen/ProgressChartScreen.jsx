@@ -29,4 +29,5 @@ export function ProgressChartScreen() {
     )
 }
 
+export default ProgressChartScreen;
 //6*24*60*60*1000 gets the date 6 days ago, so the range is 7 days including today
