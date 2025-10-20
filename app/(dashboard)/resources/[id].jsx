@@ -1,11 +1,10 @@
 //dynamic routes for book page based on book id
 //When access the book details, we need to access the ID of the book from the route(to use bookID to fetch the database)
-import { StyleSheet} from 'react-native'
+import { StyleSheet, View} from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import { useResources } from '../../../hooks/useResources'
 import MultiSelect from 'react-native-multiple-select'
-
 
 //theme components
 import ThemeView from '../../../components/ThemeView'

@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import { UserProvider } from "../contexts/UserContext";
 import { BooksProvider } from "../contexts/BooksContext";
 import { ResourcesProvider } from "../contexts/ResourcesContext";
+import { useEffect } from "react";
 
 useEffect(() => {
   // eslint-disable-next-line no-console
